@@ -40,7 +40,21 @@ class Tag:
         """
 
         self.kwargs = kwargs
+        for kwarg in self.kwargs:
+            self.kwargs[kwarg] = str(self.kwargs[kwarg])
+
         self._parse_kwargs()
+
+    def __str__(self):
+        """Returns an instance of this record as a string.
+        """
+
+        element_as_str = '<' + self.tag_name
+        for kwarg in self.kwargs:
+            element_as_str += ' ' + kwarg + '=' + self.kwargs[kwarg]
+        element_as_str += '/>'
+
+        return element_as_str
 
     def _parse_kwargs(self):
         """Makes sure that all required keyword arguments have been specified.
@@ -59,21 +73,66 @@ class Tag:
         if self.required_kwargs:
             raise errors.UnsatisfiedAttributesError()
 
-class Circle(Tag):
+class Animate(Tag):
+    """Represents an xml animation tag.
+    """
+
+    tag_name = 'animate'
+    required_kwargs = ['attributeName', 'begin', 'dur', 'to', 'fill']
+
+class AnimatableTag(Tag):
+    """Represents an xml tag which may have animations applied to it.
+    """
+
+    tag_name = 'AnimatableTag'
+    animations = []
+
+    def __str__(self):
+        """Returns an instance of this record as a string.
+        """
+
+        element_as_str = '<' + self.tag_name
+        for kwarg in self.kwargs:
+            element_as_str += ' {}={}'.format(kwarg, self.kwargs[kwarg])
+        element_as_str += '>'
+
+        for animation in self.animations:
+            element_as_str += animation
+        element_as_str += '</{}>'.format(self.tag_name)
+
+        return element_as_str
+
+    def add_animation(self, animation):
+        """Adds an animation to the tag as a child element.
+
+        Args:
+          animation: The animation which we are adding as a child to the
+                     current element.
+
+        Usage:
+          >>> c = elements.Circle(id='hello-there', cx=3, cy=4, r=7)
+          >>> a = elements.Animate(attributeName='cx', begin='0.0s',
+          ...                      dur='0.1s', to=4, fill='freeze')
+          >>> c.add_animation(a)
+        """
+
+        self.animations.append(str(animation))
+
+class Circle(AnimatableTag):
     """Represents an xml circle tag.
     """
 
     tag_name = 'circle'
-    required_kwargs = ['id', 'x_center', 'y_center', 'radius']
+    required_kwargs = ['id', 'cx', 'cy', 'r']
 
-class Line(Tag):
+class Line(AnimatableTag):
     """Represents an xml line tag.
     """
 
     tag_name = 'line'
-    required_kwargs = ['id', 'x_start', 'y_start', 'x_end', 'y_end']
+    required_kwargs = ['id', 'x1', 'y1', 'x2', 'y2']
 
-class Rect(Tag):
+class Rect(AnimatableTag):
     """Represents an xml rect tag.
     """
 
