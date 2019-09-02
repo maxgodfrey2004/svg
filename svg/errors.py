@@ -12,9 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Contains utilities pertinent to creating a Scalable Vector Graphic.
+"""Contains errors which may be raised by modules within this application.
 """
 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+
+class UnsatisfiedAttributesError(Exception):
+    """Represents an xml tag not having all required attributes.
+    """
+
+    def __init__(self, message=None):
+        """Initialises the error.
+        """
+
+        self.message = message
+        if not self.message:
+            self.message = 'Tag does not have all required attributes'
+
+        super().__init__(self.message)
