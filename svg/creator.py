@@ -45,6 +45,8 @@ class Creator(elements.Svg):
     """A Scalable Vector Graphic creator.
     """
 
+    animations = []
+
     def write_to(self, outfile_path):
         """Writes the contents of the creator to a file.
 
@@ -60,7 +62,7 @@ class Creator(elements.Svg):
         else:
             raise errors.UnknownExtensionError()
 
-    def xml_write(self, outfile_path):
+    def html_write(self, outfile_path):
         """Writes the contents of the creator as html to a file.
 
         Args:
