@@ -21,6 +21,8 @@ from __future__ import print_function
 
 import svg.errors as errors
 
+SVG_XMLNS_DEFAULT = 'http://www.w3.org/2000/svg'
+
 class Tag:
     """Represents an xml tag.
     """
@@ -149,3 +151,24 @@ class Svg(AnimatableTag):
     animations = []
     tag_name = 'svg'
     required_kwargs = ['width', 'height']
+
+    def __init__(self, **kwargs):
+        """Initialises the svg tag.
+
+        Args:
+          **kwargs: All attributes assigned to this tag.
+
+        Raises:
+          UnsatisfiedAttributesError: The required keyword arguments have not
+                                      been satisfied.
+        """
+
+        super().__init__(**kwargs)
+
+        self.kwargs = kwargs
+        for kwarg in self.kwargs:
+            self.kwargs[kwarg] = str(self.kwargs[kwarg])
+        if 'xmlns' not in kwargs:
+            kwargs['xmlns'] = SVG_XMLNS_DEFAULT
+
+        self._parse_kwargs()

@@ -27,7 +27,7 @@ class UnknownExtensionError(Exception):
         self.message = message
         if not self.message:
             self.message = 'File extension is not recognised'
-        
+
         super().__init__(self.message)
 
 class UnsatisfiedAttributesError(Exception):
