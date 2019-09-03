@@ -19,7 +19,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import errors
+import svg.errors as errors
 
 class Tag:
     """Represents an xml tag.
@@ -93,7 +93,7 @@ class AnimatableTag(Tag):
 
         element_as_str = '<' + self.tag_name
         for kwarg in self.kwargs:
-            element_as_str += ' {}={}'.format(kwarg, self.kwargs[kwarg])
+            element_as_str += ' {}="{}"'.format(kwarg, self.kwargs[kwarg])
         element_as_str += '>'
 
         for animation in self.animations:
@@ -138,3 +138,10 @@ class Rect(AnimatableTag):
 
     tag_name = 'rect'
     required_kwargs = ['id', 'x', 'y', 'width', 'height']
+
+class Svg(AnimatableTag):
+    """Represents an xml svg tag.
+    """
+
+    tag_name = 'svg'
+    required_kwargs = ['width', 'height']

@@ -19,14 +19,22 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+class UnknownExtensionError(Exception):
+    """Represents a specified file not having a recognised extension.
+    """
+
+    def __init__(self, message=None):
+        self.message = message
+        if not self.message:
+            self.message = 'File extension is not recognised'
+        
+        super().__init__(self.message)
+
 class UnsatisfiedAttributesError(Exception):
     """Represents an xml tag not having all required attributes.
     """
 
     def __init__(self, message=None):
-        """Initialises the error.
-        """
-
         self.message = message
         if not self.message:
             self.message = 'Tag does not have all required attributes'
