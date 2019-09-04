@@ -82,12 +82,12 @@ class Animate(Tag):
     tag_name = 'animate'
     required_kwargs = ['attributeName', 'begin', 'dur', 'to', 'fill']
 
-class AnimatableTag(Tag):
-    """Represents an xml tag which may have animations applied to it.
+class ParentTag(Tag):
+    """Represents an xml tag which may have child tags added to it.
     """
 
-    tag_name = 'AnimatableTag'
-    animations = []
+    tag_name = 'ParentTag'
+    children = []
 
     def __str__(self):
         """Returns an instance of this record as a string.
@@ -98,57 +98,56 @@ class AnimatableTag(Tag):
             element_as_str += ' {}="{}"'.format(kwarg, self.kwargs[kwarg])
         element_as_str += '>'
 
-        for animation in self.animations:
-            element_as_str += animation
+        for child in self.children:
+            element_as_str += child
         element_as_str += '</{}>'.format(self.tag_name)
 
         return element_as_str
 
-    def add_animation(self, animation):
-        """Adds an animation to the tag as a child element.
+    def add_child(self, animation):
+        """Adds a child element to the tag.
 
         Args:
-          animation: The animation which we are adding as a child to the
-                     current element.
+          child: The tag which we are adding as a child to the current element.
 
         Usage:
           >>> c = elements.Circle(id='hello-there', cx=3, cy=4, r=7)
           >>> a = elements.Animate(attributeName='cx', begin='0.0s',
           ...                      dur='0.1s', to=4, fill='freeze')
-          >>> c.add_animation(a)
+          >>> c.add_child(a)
         """
 
-        self.animations.append(str(animation))
+        self.children.append(str(animation))
 
-class Circle(AnimatableTag):
+class Circle(ParentTag):
     """Represents an xml circle tag.
     """
 
-    animations = []
+    children = []
     tag_name = 'circle'
     required_kwargs = ['id', 'cx', 'cy', 'r']
 
-class Line(AnimatableTag):
+class Line(ParentTag):
     """Represents an xml line tag.
     """
 
-    animations = []
+    children = []
     tag_name = 'line'
     required_kwargs = ['id', 'x1', 'y1', 'x2', 'y2']
 
-class Rect(AnimatableTag):
+class Rect(ParentTag):
     """Represents an xml rect tag.
     """
 
-    animations = []
+    children = []
     tag_name = 'rect'
     required_kwargs = ['id', 'x', 'y', 'width', 'height']
 
-class Svg(AnimatableTag):
+class Svg(ParentTag):
     """Represents an xml svg tag.
     """
 
-    animations = []
+    children = []
     tag_name = 'svg'
     required_kwargs = ['width', 'height']
 
