@@ -46,7 +46,8 @@ def test_parenttag():
     parenttag_str = str(parenttag)
 
     assert parenttag_str.startswith('<' + parenttag.tag_name)
-    assert '<rect id="rect"' in parenttag_str
+    assert '<rect' in parenttag_str
+    assert 'id="rect"' in parenttag_str
     assert '</rect>' in parenttag_str
 
 def test_animate():
@@ -151,9 +152,14 @@ def test_text():
     """
 
     text = elements.Text('SVG!', id='text', x=100, y=100)
-    text_str = str(text)
 
+    child_animate = elements.Animate(attributeName='x', begin='0.1s', dur='1s',
+                                     to=30, fill='freeze')
+    text.add_child(child_animate)
+
+    text_str = str(text)
     assert text_str.startswith('<text')
     assert text_str.endswith('</text>')
+    assert '<animate' in text_str
     assert 'SVG!' in text_str
     assert 'x="100"' in text_str
