@@ -127,6 +127,14 @@ class Circle(ParentTag):
     tag_name = 'circle'
     required_kwargs = ['id', 'cx', 'cy', 'r']
 
+class Ellipse(ParentTag):
+    """Represents an xml ellipse tag.
+    """
+
+    children = []
+    tag_name = 'ellipse'
+    required_kwargs = ['id', 'cx', 'cy', 'rx', 'ry']
+
 class Line(ParentTag):
     """Represents an xml line tag.
     """
@@ -134,6 +142,30 @@ class Line(ParentTag):
     children = []
     tag_name = 'line'
     required_kwargs = ['id', 'x1', 'y1', 'x2', 'y2']
+
+class Path(ParentTag):
+    """Represents an xml path tag.
+    """
+
+    children = []
+    tag_name = 'path'
+    required_kwargs = ['id', 'd']
+
+class Polygon(ParentTag):
+    """Represents an xml polygon tag.
+    """
+
+    children = []
+    tag_name = 'polygon'
+    required_kwargs = ['id', 'points']
+
+class Polyline(ParentTag):
+    """Represents an xml polyline tag.
+    """
+
+    children = []
+    tag_name = 'polyline'
+    required_kwargs = ['id', 'points']
 
 class Rect(ParentTag):
     """Represents an xml rect tag.
@@ -171,3 +203,48 @@ class Svg(ParentTag):
             kwargs['xmlns'] = SVG_XMLNS_DEFAULT
 
         self._parse_kwargs()
+
+class Text(ParentTag):
+    """Represents an xml text tag.
+    """
+
+    children = []
+    tag_name = 'text'
+    required_kwargs = ['id', 'x', 'y']
+
+    def __init__(self, text='', **kwargs):
+        """Initialises the text tag.
+
+        Args:
+          text: The text to render when the tag is converted to xml/html.
+          **kwargs: All attributes assigned to this tag.
+        
+        Raises:
+          UnsatisfiedAttributesError: The required keyword arguments have not
+                                      been satisfied.
+        """
+
+        super().__init__(**kwargs)
+
+        self.text = text
+        self.kwargs = kwargs
+        for kwarg in self.kwargs:
+            self.kwargs[kwarg] = str(self.kwargs[kwarg])
+
+
+    def __str__(self):
+        """Returns an instance of this record as a string.
+        """
+
+        element_as_str = '<' + self.tag_name
+        for kwarg in self.kwargs:
+            element_as_str += ' {}="{}"'.format(kwarg, self.kwargs[kwarg])
+        element_as_str += '>'
+
+        element_as_str += self.text
+
+        for child in self.children:
+            element_as_str += child
+        element_as_str += '</{}>'.format(self.tag_name)
+
+        return element_as_str
