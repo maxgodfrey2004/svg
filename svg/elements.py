@@ -218,7 +218,7 @@ class Text(ParentTag):
         Args:
           text: The text to render when the tag is converted to xml/html.
           **kwargs: All attributes assigned to this tag.
-        
+
         Raises:
           UnsatisfiedAttributesError: The required keyword arguments have not
                                       been satisfied.
