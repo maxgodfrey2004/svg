@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+install:
+  - pip3 install coveralls
+  - pip3 install pytest
+  - pip3 install pytest-cov
+  - pip3 install -r requirements.txt
+  - pip3 install -e .
+script:
+  - python3 -m pytest --cov=svg/
+after_success:
+  - coveralls
