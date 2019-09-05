@@ -248,3 +248,18 @@ class Text(ParentTag):
         element_as_str += '</{}>'.format(self.tag_name)
 
         return element_as_str
+
+def custom_parenttag(tag_name, *required_kwargs):
+    """Returns a custom element.
+
+    Args:
+      tag_name: The name of the element.
+      *required_kwargs: The keyword arguments the element requires to be
+                        initialised.
+    """
+
+    CustomTag = ParentTag
+    CustomTag.tag_name = tag_name
+    CustomTag.required_kwargs = list(map(str, required_kwargs[:]))
+
+    return CustomTag

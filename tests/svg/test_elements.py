@@ -163,3 +163,19 @@ def test_text():
     assert '<animate' in text_str
     assert 'SVG!' in text_str
     assert 'x="100"' in text_str
+
+def test_create_parenttag():
+    """Tests elements.custom_parenttag."""
+
+    CustomTag = elements.custom_parenttag('custom', 'arg0', 'arg1')
+
+    try:
+        bad_instance = CustomTag(arg0=3, arg7='hi')
+    except svg.errors.UnsatisfiedAttributesError:
+        pass
+
+    good_instance = CustomTag(arg0=3, arg1=3.14)
+    good_str = str(good_instance)
+
+    assert good_str.startswith('<custom')
+    assert good_str.endswith('</custom>')
